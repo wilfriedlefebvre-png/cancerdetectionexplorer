@@ -5026,11 +5026,12 @@ function BodyConditionExplorer() {
           <div className="conditions-scroll" style={{
             display:"flex", 
             flexDirection:"column", 
-            gap: isMobile ? 12 : 10, 
+            gap: 0, // Using margin-bottom instead for better mobile support
             overflowY:"auto", 
             overflowX:"hidden", 
             paddingRight:8, 
-            height:"calc(100% - 40px)"
+            height:"calc(100% - 40px)",
+            alignItems: "stretch"
           }}>
 
             {filtered.map((c) => (
@@ -5047,14 +5048,20 @@ function BodyConditionExplorer() {
                   ...(isMobile ? {
                     minHeight: 44,
                     cursor: "pointer",
-                    WebkitTapHighlightColor: "transparent"
-                  } : {}),
+                    WebkitTapHighlightColor: "transparent",
+                    marginBottom: 12,
+                  } : {
+                    marginBottom: 10,
+                  }),
 
                   ...styles.card,
 
                   borderColor: selectedId === c.id ? "#6366f1" : "#e5e7eb",
                   
                   flexShrink: 0,
+                  marginTop: 0,
+                  marginLeft: 0,
+                  marginRight: 0,
 
                 }}
 
@@ -5773,6 +5780,10 @@ const styles: Record<string, React.CSSProperties> = {
     boxSizing: "border-box",
 
     display: "block",
+
+    margin: 0,
+
+    isolation: "isolate",
 
   },
 
