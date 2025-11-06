@@ -4825,6 +4825,17 @@ function BodyConditionExplorer() {
 
   const [ageFilter, setAgeFilter] = useState<number | null>(null); // Filter by early detection age
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
 
 
   const systems = useMemo(() => {
@@ -4882,38 +4893,69 @@ function BodyConditionExplorer() {
 
   return (
 
-    <div style={styles.page}>
+    <div style={{
+      ...styles.page,
+      backgroundAttachment: isMobile ? "scroll" : "fixed"
+    }}>
 
       {/* Background overlay for readability */}
       <div style={styles.overlay}></div>
 
-      <header style={{...styles.header, position: "relative", zIndex: 5}}>
+      <header style={{
+        ...styles.header, 
+        position: "relative", 
+        zIndex: 5,
+        flexDirection: isMobile ? "column" : "row",
+        alignItems: isMobile ? "stretch" : "center",
+        gap: isMobile ? 12 : undefined
+      }}>
 
         <div style={{display:"flex", flexDirection:"column", gap:4}}>
 
-          <h1 style={{margin:0, fontSize:24}}>Cancer Detection Explorer</h1>
+          <h1 style={{margin:0, fontSize: isMobile ? 20 : 24}}>Cancer Detection Explorer</h1>
 
           <p style={{margin:0, opacity:0.8, fontSize:12}}>Educational only — not medical advice. If you have symptoms, seek care from a licensed clinician or emergency services if needed.</p>
 
         </div>
 
-        <div style={{display:"flex", gap:8, alignItems:"center"}}>
+        <div style={{
+          display:"flex", 
+          flexDirection: isMobile ? "column" : "row",
+          gap: isMobile ? 8 : 8, 
+          alignItems: isMobile ? "stretch" : "center",
+          width: isMobile ? "100%" : "auto"
+        }}>
 
           <input
 
             aria-label="Search conditions"
 
-            placeholder="Search conditions (e.g., chest pain, diabetes, eczema)"
+            placeholder="Search conditions"
 
             value={query}
 
             onChange={(e) => setQuery(e.target.value)}
 
-            style={styles.input}
+            style={{
+              ...styles.input,
+              width: isMobile ? "100%" : styles.input.width,
+              fontSize: isMobile ? 16 : undefined, // Prevents zoom on iOS
+              minHeight: isMobile ? 44 : undefined // Better touch target
+            }}
 
           />
 
-          <select aria-label="Filter by system" value={systemFilter} onChange={(e) => setSystemFilter(e.target.value)} style={styles.select}>
+          <select 
+            aria-label="Filter by system" 
+            value={systemFilter} 
+            onChange={(e) => setSystemFilter(e.target.value)} 
+            style={{
+              ...styles.select,
+              width: isMobile ? "100%" : "auto",
+              fontSize: isMobile ? 16 : undefined,
+              minHeight: isMobile ? 44 : undefined
+            }}
+          >
 
             {systems.map((s) => (
 
@@ -4930,11 +4972,16 @@ function BodyConditionExplorer() {
               const val = e.target.value;
               setAgeFilter(val === "All ages" ? null : parseInt(val));
             }} 
-            style={styles.select}
+            style={{
+              ...styles.select,
+              width: isMobile ? "100%" : "auto",
+              fontSize: isMobile ? 16 : undefined,
+              minHeight: isMobile ? 44 : undefined
+            }}
           >
             <option value="All ages">All Ages</option>
-            <option value="0">Pediatric/No Screening (0+)</option>
-            <option value="15">Teen/Young Adult (15+)</option>
+            <option value="0">Pediatric (0+)</option>
+            <option value="15">Teen (15+)</option>
             <option value="18">Adult (18+)</option>
             <option value="21">Young Adult (21+)</option>
             <option value="40">Middle Age (40+)</option>
@@ -4949,9 +4996,19 @@ function BodyConditionExplorer() {
 
 
 
-      <main style={{...styles.main, position: "relative", zIndex: 1}}>
+      <main style={{
+        ...styles.main, 
+        position: "relative", 
+        zIndex: 1,
+        gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr 1.4fr",
+        padding: isMobile ? 8 : 16
+      }}>
 
-        <section style={styles.bodyPanel}>
+        <section style={{
+          ...styles.bodyPanel,
+          height: isMobile ? "auto" : undefined,
+          minHeight: isMobile ? 250 : undefined
+        }}>
 
           <HumanBodySVG activeRegion={activeRegion} onRegion={(r) => setActiveRegion(r)} highlightRegions={selected?.regions || []} />
 
@@ -4959,7 +5016,10 @@ function BodyConditionExplorer() {
 
 
 
-        <section style={styles.listPanel}>
+        <section style={{
+          ...styles.listPanel,
+          height: isMobile ? "400px" : "calc(100dvh - 140px)",
+        }}>
 
           <h2 style={styles.h2}>Conditions ({filtered.length})</h2>
 
@@ -4976,6 +5036,12 @@ function BodyConditionExplorer() {
                 onClick={() => setSelectedId(c.id)}
 
                 style={{
+                  ...(isMobile ? {
+                    minHeight: 44,
+                    padding: "12px",
+                    cursor: "pointer",
+                    WebkitTapHighlightColor: "transparent"
+                  } : {}),
 
                   ...styles.card,
 
@@ -5033,7 +5099,10 @@ function BodyConditionExplorer() {
 
 
 
-        <section style={styles.detailPanel}>
+        <section style={{
+          ...styles.detailPanel,
+          height: isMobile ? "400px" : "calc(100dvh - 140px)",
+        }}>
 
           {!selected ? (
 
@@ -5558,7 +5627,7 @@ const styles: Record<string, React.CSSProperties> = {
 
     gap: 12,
 
-    padding: "16px 20px",
+    padding: "12px 16px",
 
     borderBottom: "1px solid #e5e7eb",
 
@@ -5588,6 +5657,8 @@ const styles: Record<string, React.CSSProperties> = {
 
     outline: "none",
 
+    fontSize: 14,
+
   },
 
   select: {
@@ -5599,6 +5670,10 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 10,
 
     outline: "none",
+
+    fontSize: 14,
+
+    cursor: "pointer",
 
   },
 
@@ -5644,6 +5719,8 @@ const styles: Record<string, React.CSSProperties> = {
 
     backdropFilter: "blur(10px)",
 
+    minHeight: 300,
+
   },
 
   detailPanel: {
@@ -5661,6 +5738,8 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "auto",
 
     backdropFilter: "blur(10px)",
+
+    minHeight: 300,
 
   },
 
