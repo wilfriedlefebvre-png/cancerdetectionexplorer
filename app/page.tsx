@@ -5023,7 +5023,15 @@ function BodyConditionExplorer() {
 
           <h2 style={styles.h2}>Conditions ({filtered.length})</h2>
 
-          <div className="conditions-scroll" style={{display:"flex", flexDirection:"column", gap:8, overflowY:"auto", overflowX:"hidden", paddingRight:8, height:"calc(100% - 40px)"}}>
+          <div className="conditions-scroll" style={{
+            display:"flex", 
+            flexDirection:"column", 
+            gap:8, 
+            overflowY:"auto", 
+            overflowX:"hidden", 
+            paddingRight:8, 
+            height:"calc(100% - 40px)"
+          }}>
 
             {filtered.map((c) => (
 
@@ -5038,7 +5046,6 @@ function BodyConditionExplorer() {
                 style={{
                   ...(isMobile ? {
                     minHeight: 44,
-                    padding: "12px",
                     cursor: "pointer",
                     WebkitTapHighlightColor: "transparent"
                   } : {}),
@@ -5046,6 +5053,8 @@ function BodyConditionExplorer() {
                   ...styles.card,
 
                   borderColor: selectedId === c.id ? "#6366f1" : "#e5e7eb",
+                  
+                  flexShrink: 0,
 
                 }}
 
@@ -5756,6 +5765,14 @@ const styles: Record<string, React.CSSProperties> = {
     padding: 12,
 
     background: "rgba(253, 251, 246, 0.98)",
+
+    position: "relative",
+
+    width: "100%",
+
+    boxSizing: "border-box",
+
+    display: "block",
 
   },
 
