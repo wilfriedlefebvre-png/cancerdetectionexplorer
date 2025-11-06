@@ -4825,6 +4825,8 @@ function BodyConditionExplorer() {
 
   const [ageFilter, setAgeFilter] = useState<number | null>(null); // Filter by early detection age
 
+  const [sortOrder, setSortOrder] = useState<"alphabetical" | "popular">("alphabetical");
+
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -4854,7 +4856,7 @@ function BodyConditionExplorer() {
 
     const q = query.trim().toLowerCase();
 
-    return CONDITIONS.filter((c) => {
+    const filteredConditions = CONDITIONS.filter((c) => {
 
       const inSystem = systemFilter === "All systems" || c.systems.includes(systemFilter);
 
@@ -4874,7 +4876,27 @@ function BodyConditionExplorer() {
 
     });
 
-  }, [query, systemFilter, activeRegion, ageFilter]);
+    // Sort the filtered conditions
+    const sorted = [...filteredConditions].sort((a, b) => {
+      if (sortOrder === "alphabetical") {
+        return a.name.localeCompare(b.name);
+      } else {
+        // Most popular: prioritize common cancers (based on category frequency and name patterns)
+        const popularKeywords = ["breast", "lung", "colon", "prostate", "skin", "melanoma", "leukemia", "lymphoma"];
+        const aPopular = popularKeywords.some(keyword => a.name.toLowerCase().includes(keyword));
+        const bPopular = popularKeywords.some(keyword => b.name.toLowerCase().includes(keyword));
+        
+        if (aPopular && !bPopular) return -1;
+        if (!aPopular && bPopular) return 1;
+        
+        // If both or neither are popular, sort alphabetically
+        return a.name.localeCompare(b.name);
+      }
+    });
+
+    return sorted;
+
+  }, [query, systemFilter, activeRegion, ageFilter, sortOrder]);
 
 
 
@@ -4989,6 +5011,21 @@ function BodyConditionExplorer() {
             <option value="45">Mid-Adult (45+)</option>
             <option value="50">Older Adult (50+)</option>
             <option value="60">Senior (60+)</option>
+          </select>
+
+          <select 
+            aria-label="Sort order" 
+            value={sortOrder} 
+            onChange={(e) => setSortOrder(e.target.value as "alphabetical" | "popular")} 
+            style={{
+              ...styles.select,
+              width: isMobile ? "100%" : "auto",
+              fontSize: isMobile ? 16 : undefined,
+              minHeight: isMobile ? 44 : undefined
+            }}
+          >
+            <option value="alphabetical">Alphabetical</option>
+            <option value="popular">Most Popular</option>
           </select>
 
         </div>
