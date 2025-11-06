@@ -5001,13 +5001,16 @@ function BodyConditionExplorer() {
         position: "relative", 
         zIndex: 1,
         gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr 1.4fr",
+        gridTemplateRows: isMobile ? "auto auto auto" : undefined,
         padding: isMobile ? 8 : 16
       }}>
 
+        {/* Body panel - always first on mobile */}
         <section style={{
           ...styles.bodyPanel,
           height: isMobile ? "auto" : undefined,
-          minHeight: isMobile ? 250 : undefined
+          minHeight: isMobile ? 250 : undefined,
+          order: isMobile ? 1 : 0
         }}>
 
           <HumanBodySVG activeRegion={activeRegion} onRegion={(r) => setActiveRegion(r)} highlightRegions={selected?.regions || []} />
@@ -5016,9 +5019,11 @@ function BodyConditionExplorer() {
 
 
 
+        {/* Conditions list - second on mobile */}
         <section style={{
           ...styles.listPanel,
           height: isMobile ? "400px" : "calc(100dvh - 140px)",
+          order: isMobile ? 2 : 0
         }}>
 
           <h2 style={styles.h2}>Conditions ({filtered.length})</h2>
@@ -5115,9 +5120,11 @@ function BodyConditionExplorer() {
 
 
 
+        {/* Detail panel - third on mobile */}
         <section style={{
           ...styles.detailPanel,
           height: isMobile ? "400px" : "calc(100dvh - 140px)",
+          order: isMobile ? 3 : 0
         }}>
 
           {!selected ? (
