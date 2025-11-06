@@ -4907,14 +4907,15 @@ function BodyConditionExplorer() {
         zIndex: 5,
         flexDirection: isMobile ? "column" : "row",
         alignItems: isMobile ? "stretch" : "center",
-        gap: isMobile ? 12 : undefined
+        gap: isMobile ? 12 : undefined,
+        padding: isMobile ? "12px" : "12px 16px"
       }}>
 
-        <div style={{display:"flex", flexDirection:"column", gap:4}}>
+        <div style={{display:"flex", flexDirection:"column", gap: isMobile ? 6 : 4}}>
 
-          <h1 style={{margin:0, fontSize: isMobile ? 20 : 24}}>Cancer Detection Explorer</h1>
+          <h1 style={{margin:0, fontSize: isMobile ? 18 : 24, lineHeight: isMobile ? "1.2" : "1.3"}}>Cancer Detection Explorer</h1>
 
-          <p style={{margin:0, opacity:0.8, fontSize:12}}>Educational only — not medical advice. If you have symptoms, seek care from a licensed clinician or emergency services if needed.</p>
+          <p style={{margin:0, opacity:0.8, fontSize: isMobile ? 11 : 12, lineHeight: "1.4"}}>Educational only — not medical advice. If you have symptoms, seek care from a licensed clinician or emergency services if needed.</p>
 
         </div>
 
@@ -5009,7 +5010,9 @@ function BodyConditionExplorer() {
         <section style={{
           ...styles.bodyPanel,
           height: isMobile ? "auto" : undefined,
-          minHeight: isMobile ? 250 : undefined,
+          minHeight: isMobile ? 200 : undefined,
+          maxHeight: isMobile ? "300px" : undefined,
+          padding: isMobile ? 8 : 12,
           order: isMobile ? 1 : 0
         }}>
 
@@ -5022,11 +5025,17 @@ function BodyConditionExplorer() {
         {/* Conditions list - second on mobile */}
         <section style={{
           ...styles.listPanel,
-          height: isMobile ? "400px" : "calc(100dvh - 140px)",
+          height: isMobile ? "calc(100dvh - 200px)" : "calc(100dvh - 140px)",
+          maxHeight: isMobile ? "500px" : undefined,
+          padding: isMobile ? 10 : 12,
           order: isMobile ? 2 : 0
         }}>
 
-          <h2 style={styles.h2}>Conditions ({filtered.length})</h2>
+          <h2 style={{
+            ...styles.h2,
+            fontSize: isMobile ? 16 : 18,
+            marginBottom: isMobile ? 10 : 8
+          }}>Conditions ({filtered.length})</h2>
 
           <div className="conditions-scroll" style={{
             display:"flex", 
@@ -5034,9 +5043,10 @@ function BodyConditionExplorer() {
             gap: 0, // Using margin-bottom instead for better mobile support
             overflowY:"auto", 
             overflowX:"hidden", 
-            paddingRight:8, 
-            height:"calc(100% - 40px)",
-            alignItems: "stretch"
+            paddingRight: isMobile ? 4 : 8, 
+            height: isMobile ? "calc(100% - 35px)" : "calc(100% - 40px)",
+            alignItems: "stretch",
+            WebkitOverflowScrolling: "touch" // Smooth scrolling on iOS
           }}>
 
             {filtered.map((c) => (
@@ -5051,10 +5061,11 @@ function BodyConditionExplorer() {
 
                 style={{
                   ...(isMobile ? {
-                    minHeight: 44,
+                    minHeight: 48,
                     cursor: "pointer",
                     WebkitTapHighlightColor: "transparent",
-                    marginBottom: 12,
+                    marginBottom: 10,
+                    padding: "14px",
                   } : {
                     marginBottom: 10,
                   }),
@@ -5076,11 +5087,25 @@ function BodyConditionExplorer() {
 
                   <div>
 
-                    <div style={{fontWeight:600}}>{c.name}</div>
+                    <div style={{
+                      fontWeight:600,
+                      fontSize: isMobile ? 14 : undefined,
+                      lineHeight: isMobile ? "1.3" : undefined
+                    }}>{c.name}</div>
 
-                    <div style={{fontSize:12, opacity:0.7}}>{c.category} · {c.systems.join(", ")}</div>
+                    <div style={{
+                      fontSize: isMobile ? 11 : 12, 
+                      opacity:0.7,
+                      marginTop: isMobile ? 2 : 0,
+                      lineHeight: isMobile ? "1.4" : undefined
+                    }}>{c.category} · {c.systems.join(", ")}</div>
 
-                    <div style={{fontSize:12, marginTop:4, opacity:0.9}}>
+                    <div style={{
+                      fontSize: isMobile ? 11 : 12, 
+                      marginTop: isMobile ? 3 : 4, 
+                      opacity:0.9,
+                      lineHeight: isMobile ? "1.4" : undefined
+                    }}>
 
                       Regions: {c.regions.map((r) => REGION_LABELS[r]).join(", ")}
 
@@ -5088,13 +5113,26 @@ function BodyConditionExplorer() {
 
                   </div>
 
-                  <div style={{fontSize:12, opacity:0.7}}>{c.severity.length} stages</div>
+                  <div style={{
+                    fontSize: isMobile ? 11 : 12, 
+                    opacity:0.7
+                  }}>{c.severity.length} stages</div>
 
                 </div>
 
-                <div style={{fontSize:13, marginTop:6, color:"#374151"}}>{c.overview}</div>
+                <div style={{
+                  fontSize: isMobile ? 12 : 13, 
+                  marginTop: isMobile ? 8 : 6, 
+                  color:"#374151",
+                  lineHeight: isMobile ? "1.4" : undefined
+                }}>{c.overview}</div>
 
-                <div style={{display:"flex", gap:6, flexWrap:"wrap", marginTop:8}}>
+                <div style={{
+                  display:"flex", 
+                  gap: isMobile ? 4 : 6, 
+                  flexWrap:"wrap", 
+                  marginTop: isMobile ? 8 : 8
+                }}>
 
                   {c.symptoms.slice(0,4).map((s, i) => (
 
@@ -5123,7 +5161,9 @@ function BodyConditionExplorer() {
         {/* Detail panel - third on mobile */}
         <section style={{
           ...styles.detailPanel,
-          height: isMobile ? "400px" : "calc(100dvh - 140px)",
+          height: isMobile ? "calc(100dvh - 200px)" : "calc(100dvh - 140px)",
+          maxHeight: isMobile ? "500px" : undefined,
+          padding: isMobile ? 10 : 12,
           order: isMobile ? 3 : 0
         }}>
 
@@ -5137,23 +5177,43 @@ function BodyConditionExplorer() {
 
               <div>
 
-                <h2 style={{margin:"0 0 4px 0"}}>{selected.name}</h2>
+                <h2 style={{
+                  margin:"0 0 4px 0",
+                  fontSize: isMobile ? 18 : undefined,
+                  lineHeight: isMobile ? "1.3" : undefined
+                }}>{selected.name}</h2>
 
-                <div style={{fontSize:13, opacity:0.8}}>
+                <div style={{
+                  fontSize: isMobile ? 12 : 13, 
+                  opacity:0.8,
+                  lineHeight: isMobile ? "1.4" : undefined,
+                  marginTop: isMobile ? 4 : 0
+                }}>
 
                   {selected.category} · {selected.systems.join(", ")} · Regions: {selected.regions.map((r) => REGION_LABELS[r]).join(", ")}
 
                 </div>
 
                 {selected.earlyDetectionAge !== undefined && (
-                  <div style={{marginTop:6, fontSize:13, fontWeight:500, color:"#059669"}}>
+                  <div style={{
+                    marginTop: isMobile ? 8 : 6, 
+                    fontSize: isMobile ? 12 : 13, 
+                    fontWeight:500, 
+                    color:"#059669",
+                    lineHeight: isMobile ? "1.4" : undefined
+                  }}>
                     {selected.earlyDetectionAge === 0 
                       ? "Early Detection: No routine screening (monitor symptoms)" 
                       : `Recommended Early Detection Age: ${selected.earlyDetectionAge} years`}
                   </div>
                 )}
 
-                <p style={{marginTop:8, color:"#374151"}}>{selected.overview}</p>
+                <p style={{
+                  marginTop: isMobile ? 10 : 8, 
+                  color:"#374151",
+                  fontSize: isMobile ? 13 : undefined,
+                  lineHeight: isMobile ? "1.5" : undefined
+                }}>{selected.overview}</p>
 
               </div>
 
@@ -5809,6 +5869,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 999,
 
     background: "#f9fafb",
+
+    minHeight: 24,
 
   },
 
