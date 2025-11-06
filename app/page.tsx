@@ -5026,7 +5026,7 @@ function BodyConditionExplorer() {
           <div className="conditions-scroll" style={{
             display:"flex", 
             flexDirection:"column", 
-            gap:8, 
+            gap: isMobile ? 12 : 10, 
             overflowY:"auto", 
             overflowX:"hidden", 
             paddingRight:8, 
